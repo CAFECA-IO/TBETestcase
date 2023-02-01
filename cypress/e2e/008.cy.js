@@ -50,14 +50,14 @@ describe("TBETC000008_成交手續費費率調整", () => {
       .click(); //由 header 找到交易市場，並以'.invoke("removeAttr", "target")'指令繞過新標籤頁
     cy.selectTicker("HKD", "ETH/HKD"); //選擇 ETH/HKD 交易對
     cy.get(".selectedTicker__text").should("contain", "ETH/HKD"); //檢查是否進入正確的交易對
-    /* 
+
     //掛出 10 HKD 賣出 1 ETH 委託單
     cy.pendingOrder("sell", "10", "1", "賣出 ETH");
     cy.wait(500);
     cy.get("#notistack-snackbar").should(
-      "have.text",
+      "contain",
       "Ask 1 ETH with for 10 HKD"
-    ); //由彈出訊息檢查委託單有沒有正確送出 */
+    ); //由彈出訊息檢查委託單有沒有正確送出
   });
 
   it("建立委託單(b) 11 HKD 買入 1 ETH，並確認撮合手續費", () => {
@@ -72,26 +72,26 @@ describe("TBETC000008_成交手續費費率調整", () => {
       .click();
     cy.selectTicker("HKD", "ETH/HKD");
     cy.get(".selectedTicker__text").should("contain", "ETH/HKD"); //檢查是否進入正確的交易對
-    /* 
+
     //掛出 11 HKD 買入 1 ETH 委託單
     cy.pendingOrder("buy", "11", "1", "買入 ETH");
     cy.wait(500);
     cy.get("#notistack-snackbar").should(
-      "have.text",
+      "contain",
       "Bid 1 ETH with with 11 HKD"
-    ); //由彈出訊息檢查委託單有沒有正確送出 */
+    ); //由彈出訊息檢查委託單有沒有正確送出
 
     //檢查第一筆委託單
     cy.get('[href="/accounts"]').first().click(); //到「我的帳戶」頁面
     cy.checkFee("1", "10.0 HKD", "10.0 HKD", "0.007 ETH");
   });
-  /* 
-   it("確認委託單(a)的撮合手續費", () => {
+
+  it("確認委託單(a)的撮合手續費", () => {
     cy.visitTideBit();
     cy.login("appleboycoffeedog+cypresstest@outlook.com", "abcdABCD");
 
     cy.checkFee("1", "10.0 HKD", "1.0 ETH", "0.05 HKD");
-  });  */
+  });
 });
 
 // 禁用 Uncaught exceptions
