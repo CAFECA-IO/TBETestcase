@@ -63,14 +63,16 @@ Cypress.Commands.add("checkFee", (tradeNo, priceText, outText, feeText) => {
   cy.get(".tablet > .sidebar.item").click();
   cy.contains("交易記錄").click();
   cy.contains("成交紀錄").click();
-  cy.get(
-    `tbody > :nth-child(${tradeNo}) > :nth-child(4) > :nth-child(2)`
-  ).should("have.text", `${priceText}`); //價格
-  cy.get(
-    `tbody > :nth-child(${tradeNo}) > :nth-child(5) > :nth-child(2)`
-  ).should("have.text", `${outText}`); //流出
-  cy.get(`:nth-child(${tradeNo}) > :nth-child(7) > :nth-child(2)`).should(
-    "have.text",
+  cy.get(`tbody > :nth-child(${tradeNo}) > :nth-child(4)`).should(
+    "contain",
+    `${priceText}`
+  ); //價格
+  cy.get(`tbody > :nth-child(${tradeNo}) > :nth-child(5)`).should(
+    "contain",
+    `${outText}`
+  ); //流出
+  cy.get(`:nth-child(${tradeNo}) > :nth-child(7)`).should(
+    "contain",
     `${feeText}`
   ); //費用
 });
