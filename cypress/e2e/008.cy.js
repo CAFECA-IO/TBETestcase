@@ -63,7 +63,7 @@ describe("TBETC000008_成交手續費費率調整", () => {
   it("建立委託單(b) 11 HKD 買入 1 ETH，並確認撮合手續費", () => {
     //登入
     cy.visitTideBit();
-    cy.login("appleboycoffeedog+cypresstest2@outlook.com", "abcdABCD");
+    cy.login("appleboycoffeedog+0203@outlook.com", "20230203");
     cy.get(".success").should("be.visible"); //檢查成功登入
 
     //進入 ETH/HKD 交易對市場
