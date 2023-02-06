@@ -57,3 +57,22 @@ Cypress.Commands.add("pendingOrder", (type, price, amount, submit) => {
     .type(amount);
   cy.contains(submit).click();
 });
+// testcase 008 檢查委託單的撮合手續費
+// 步驟：打開 sidebar -> 交易記錄 -> 成交紀錄 -> 檢查委託單的內容
+Cypress.Commands.add("checkFee", (tradeNo, priceText, outText, feeText) => {
+  cy.get(".tablet > .sidebar.item").click();
+  cy.contains("交易記錄").click();
+  cy.contains("成交紀錄").click();
+  cy.get(`tbody > :nth-child(${tradeNo}) > :nth-child(4)`).should(
+    "contain",
+    `${priceText}`
+  ); //價格
+  cy.get(`tbody > :nth-child(${tradeNo}) > :nth-child(5)`).should(
+    "contain",
+    `${outText}`
+  ); //流出
+  cy.get(`:nth-child(${tradeNo}) > :nth-child(7)`).should(
+    "contain",
+    `${feeText}`
+  ); //費用
+});
