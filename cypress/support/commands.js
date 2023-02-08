@@ -57,6 +57,22 @@ Cypress.Commands.add("pendingOrder", (type, price, amount, submit) => {
     .type(amount);
   cy.contains(submit).click();
 });
+// testcase 002 進入管理人員設定
+Cypress.Commands.add("enterAdminSettings", () => {
+  cy.get(".admin-header__hamburger").click(); //打開 sidebar
+  cy.contains("管理人員").click();
+  cy.contains("管理人員設定").click();
+  cy.wait(100);
+  cy.contains("管理人員設定"); //驗證標題文字是否正確
+});
+// testcase 002 新增權限
+Cypress.Commands.add("addAdmin", (id) => {
+  cy.get(".screen__table-tool-icon").eq(1).click();
+  cy.get('[name="user-setting-add-user-id"]').clear().type("test");
+  cy.get('[name="user-setting-add-user-email"]').clear().type(id);
+  cy.contains("Root").click();
+  cy.contains("確認").click();
+});
 // testcase 004 調整出入金
 //currency:貨幣種類, type:deposit/withdraw typeNumber:入金=1 出金=2, typeText:入金手續費/出金手續費
 //inputFee:輸入值, outputFee:應輸出的值
