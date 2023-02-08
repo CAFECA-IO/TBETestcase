@@ -1,7 +1,10 @@
 describe("TBETC000008_成交手續費費率調整", () => {
+  beforeEach(() => {
+    cy.visitTideBit();
+  });
+
   it("在交易對管理中把 ETH/HKD 的 Ask/Bid 手續費率調整為 0.5% 和 0.7%", () => {
     //登入管理者帳號
-    cy.visitTideBit();
     cy.login("appleboycoffeedog@outlook.com", "cr2fbVWg");
     cy.get(".success").should("be.visible"); //檢查成功登入
 
@@ -40,7 +43,6 @@ describe("TBETC000008_成交手續費費率調整", () => {
 
   it("建立委託單(a) 10 HKD 賣出 1 ETH", () => {
     //登入
-    cy.visitTideBit();
     cy.login("appleboycoffeedog+cypresstest@outlook.com", "abcdABCD");
     cy.get(".success").should("be.visible"); //檢查成功登入
 
@@ -62,8 +64,7 @@ describe("TBETC000008_成交手續費費率調整", () => {
 
   it("建立委託單(b) 11 HKD 買入 1 ETH，並確認撮合手續費", () => {
     //登入
-    cy.visitTideBit();
-    cy.login("appleboycoffeedog+cypresstest2@outlook.com", "abcdABCD");
+    cy.login("appleboycoffeedog+0203@outlook.com", "20230203");
     cy.get(".success").should("be.visible"); //檢查成功登入
 
     //進入 ETH/HKD 交易對市場
@@ -87,7 +88,6 @@ describe("TBETC000008_成交手續費費率調整", () => {
   });
 
   it("確認委託單(a)的撮合手續費", () => {
-    cy.visitTideBit();
     cy.login("appleboycoffeedog+cypresstest@outlook.com", "abcdABCD");
 
     cy.checkFee("1", "10.0 HKD", "1.0 ETH", "0.05 HKD");
