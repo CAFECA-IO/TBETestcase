@@ -1,6 +1,6 @@
 const newUser = {
-  id: "appleboycoffeedog+0119@outlook.com",
-  password: "20230119",
+  id: "appleboycoffeedog+0210@outlook.com",
+  password: "20230210",
 };
 
 describe("TBETC000002_管理權限帳號", () => {
