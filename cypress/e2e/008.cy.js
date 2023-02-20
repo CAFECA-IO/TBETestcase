@@ -3,8 +3,8 @@ const userA = {
   password: "abcdABCD",
 };
 const userB = {
-  id: "appleboycoffeedog+0203@outlook.com",
-  password: "20230203",
+  id: "appleboycoffeedog+0217@outlook.com",
+  password: "20230217",
 };
 
 describe("TBETC000008_成交手續費費率調整", () => {
@@ -63,7 +63,7 @@ describe("TBETC000008_成交手續費費率調整", () => {
     cy.get(".selectedTicker__text").should("contain", "ETH/HKD"); //檢查是否進入正確的交易對
 
     //掛出 10 HKD 賣出 1 ETH 委託單
-    cy.pendingOrder("sell", "10", "1", "賣出 ETH");
+    cy.pendingLimitOrder("sell", "10", "1", "賣出 ETH");
     cy.wait(500);
     cy.get("#notistack-snackbar").should(
       "contain",
@@ -84,7 +84,7 @@ describe("TBETC000008_成交手續費費率調整", () => {
     cy.get(".selectedTicker__text").should("contain", "ETH/HKD"); //檢查是否進入正確的交易對
 
     //掛出 11 HKD 買入 1 ETH 委託單
-    cy.pendingOrder("buy", "11", "1", "買入 ETH");
+    cy.pendingLimitOrder("buy", "11", "1", "買入 ETH");
     cy.wait(500);
     cy.get("#notistack-snackbar").should(
       "contain",
