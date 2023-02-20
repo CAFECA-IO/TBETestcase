@@ -47,21 +47,15 @@ Cypress.Commands.add("selectTicker", (currency, tickers) => {
 });
 // 掛限價單
 Cypress.Commands.add("pendingLimitOrder", (type, price, amount) => {
-  cy.get(`.market-trade--${type}`)
-    .find('input[name="price"]')
-    .first()
-    .type(price);
-  cy.get(`.market-trade--${type}`)
-    .first()
-    .find('input[name="amount"]')
-    .type(amount);
+  cy.get(`.active .market-trade--${type}`).as("targetTab");
+  cy.get("@targetTab").find('input[name="price"]').type(price);
+  cy.get("@targetTab").find('input[name="amount"]').type(amount);
   cy.get(`.active .market-trade--${type} > .btn`).click();
 });
 // 掛市價單
 Cypress.Commands.add("pendingMarketOrder", (type, amount) => {
-  cy.get(`.market-trade--${type}`)
+  cy.get(`.active .market-trade--${type}`)
     .find('input[name="amount"]')
-    .eq(1)
     .type(amount);
   cy.get(`.active .market-trade--${type} > .btn`).click();
 });
