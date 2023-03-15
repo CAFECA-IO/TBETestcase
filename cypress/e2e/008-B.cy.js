@@ -1,11 +1,11 @@
-const userA = {
-  id: "appleboycoffeedog+cypresstest@outlook.com",
-  password: "abcdABCD",
-};
-const userB = {
+const newUser = {
   id: "appleboycoffeedog+0217@outlook.com",
   password: "20230217",
 };
+
+// 此 testcase 還在開發中，需要驗證 TBETC000008_成交手續費費率調整 請使用 008.cy.js
+// 008-B 的步驟是由同一個帳號掛出兩個委託單來完成驗證，由於委託單顯示的順序無法固定，這邊的做法是從費用的text(0.05 HKD/0.007 HKD)
+// 來找出需要驗證的委託單，因此這個方法只適用於「還沒有其他 ETH/HKD 成交紀錄」的新帳號
 
 describe("TBETC000008_成交手續費費率調整", () => {
   beforeEach(() => {
@@ -50,9 +50,9 @@ describe("TBETC000008_成交手續費費率調整", () => {
       .should("have.text", "0.7%"); //檢查修改的 Default 值是否正確
   });
 
-  it("建立委託單(a) 10 HKD 賣出 1 ETH", () => {
+  it("建立委託單(a) 10 HKD 賣出 1 ETH 和委託單(b) 11 HKD 買入 1 ETH，並檢查手續費", () => {
     //登入
-    cy.login(userA.id, userA.password);
+    cy.login(newUser.id, newUser.password);
     cy.get(".success").should("be.visible"); //檢查成功登入
 
     //進入 ETH/HKD 交易對市場
@@ -69,19 +69,8 @@ describe("TBETC000008_成交手續費費率調整", () => {
       "contain",
       "Ask 1 ETH with for 10 HKD"
     ); //由彈出訊息檢查委託單有沒有正確送出
-  });
 
-  it("建立委託單(b) 11 HKD 買入 1 ETH，並確認撮合手續費", () => {
-    //登入
-    cy.login(userB.id, userB.password);
-    cy.get(".success").should("be.visible"); //檢查成功登入
-
-    //進入 ETH/HKD 交易對市場
-    cy.get('.tablet > [href="/markets/btcusdt"]')
-      .invoke("removeAttr", "target")
-      .click();
-    cy.selectTicker("HKD", "ETH/HKD");
-    cy.get(".selectedTicker__text").should("contain", "ETH/HKD"); //檢查是否進入正確的交易對
+    cy.contains("Dismiss").click(); //關閉彈出訊息，否則無法找到按鈕
 
     //掛出 11 HKD 買入 1 ETH 委託單
     cy.pendingLimitOrder("buy", "11", "1", "買入 ETH");
@@ -91,15 +80,14 @@ describe("TBETC000008_成交手續費費率調整", () => {
       "Bid 1 ETH with with 11 HKD"
     ); //由彈出訊息檢查委託單有沒有正確送出
 
-    //檢查第一筆委託單
+    //檢查委託單
     cy.get('[href="/accounts"]').first().click(); //到「我的帳戶」頁面
-    cy.checkFee("1", "10.0 HKD", "10.0 HKD", "0.007 ETH");
-  });
+    cy.get(".tablet > .sidebar.item").click();
+    cy.contains("交易記錄").click();
+    cy.contains("成交紀錄").click(); //進入成交紀錄
 
-  it("確認委託單(a)的撮合手續費", () => {
-    cy.login(userA.id, userA.password);
-
-    cy.checkFee("1", "10.0 HKD", "1.0 ETH", "0.05 HKD");
+    cy.checkFeeB("10.0 HKD", "1.0 ETH", "0.05 HKD");
+    cy.checkFeeB("10.0 HKD", "10.0 HKD", "0.007 ETH");
   });
 });
 
