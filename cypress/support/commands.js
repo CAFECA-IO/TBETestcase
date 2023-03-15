@@ -57,6 +57,43 @@ Cypress.Commands.add("pendingOrder", (type, price, amount, submit) => {
     .type(amount);
   cy.contains(submit).click();
 });
+// testcase 002 進入管理人員設定
+Cypress.Commands.add("enterAdminSettings", () => {
+  cy.get(".admin-header__hamburger").click(); //打開 sidebar
+  cy.contains("管理人員").click();
+  cy.contains("管理人員設定").click();
+  cy.wait(100);
+  cy.contains("管理人員設定"); //驗證標題文字是否正確
+});
+// testcase 002 新增權限
+Cypress.Commands.add("addAdmin", (id) => {
+  cy.get(".screen__table-tool-icon").eq(1).click();
+  cy.get('[name="user-setting-add-user-id"]').clear().type("test");
+  cy.get('[name="user-setting-add-user-email"]').clear().type(id);
+  cy.contains("Root").click();
+  cy.contains("確認").click();
+});
+// testcase 004 調整出入金
+//currency:貨幣種類, type:deposit/withdraw typeNumber:入金=1 出金=2, typeText:入金手續費/出金手續費
+//inputFee:輸入值, outputFee:應輸出的值
+Cypress.Commands.add(
+  "changeFee",
+  (currency, type, typeNumber, typeText, inputFee, outputFee) => {
+    cy.get(".screen__table-rows")
+      .contains(currency)
+      .siblings(".deposit__currency-text")
+      .eq(`${typeNumber}`)
+      .as("getFee");
+    cy.get("@getFee").children(".screen__table-item--icon").click(); //抓取內容為 "BTC" 的 DOM 元素，再用 siblings 選擇器找到入金手續費按鈕的位置，命名為'depositFee'
+    cy.contains(typeText);
+    cy.contains(currency); //確認沒有找錯
+
+    cy.get(`input[name="${type}-fee"]`).clear().type(inputFee); //先清空 input 再輸入
+    cy.contains("確認").click();
+    cy.wait(3000); //等待一段時間讓資料送出
+    cy.get("@getFee").should("have.text", `${outputFee}%`); //檢查修改的值是否正確
+  }
+);
 // testcase 008 檢查委託單的撮合手續費
 // 步驟：打開 sidebar -> 交易記錄 -> 成交紀錄 -> 檢查委託單的內容
 Cypress.Commands.add("checkFee", (tradeNo, priceText, outText, feeText) => {
